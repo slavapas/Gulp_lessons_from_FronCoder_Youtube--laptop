@@ -13,10 +13,18 @@ gulp.task('pug', function(){
         .pipe(gulp.dest('build'));
 });
 
-// add stylus
+// add stylus + autoprefixer
 gulp.task('stylus', function(){
-    return gulp.src('src/static/stylus/main.styl')
+    return gulp.src('src/static/stylus/*.styl')
     // here you can add options from web site of this plugin between curly brackets (stylus)
+        .pipe(gp.sourcemaps.init())
         .pipe(gp.stylus({}))
-        .pipe(gulp.dest('build'));
+        .pipe(gp.autoprefixer({
+            browsers: ['last 10 versions']
+        }))
+        .on("error",gp.notify.onError({
+            title: "style"
+        })) //
+        .pipe(gp.csso())
+        .pipe(gulp.dest('build/static/css'));
 });
