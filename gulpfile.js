@@ -39,3 +39,9 @@ gulp.task('watch', function(){
     gulp.watch('src/static/**/*.styl',gulp.series('stylus'));
 });
 
+// запускаем порядок запуска тасков
+gulp.task('default', gulp.series(
+    gulp.parallel('pug','stylus'),
+    'watch'
+))
+
