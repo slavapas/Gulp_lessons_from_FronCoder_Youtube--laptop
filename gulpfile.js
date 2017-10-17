@@ -2,6 +2,18 @@
 
 var gulp = require ('gulp'),
     gp   = require ('gulp-load-plugins')();
+var browserSync = require('browser-sync').create();
+
+
+// Static server
+gulp.task('serve', function() { // переименуем browser-sync в serve
+    browserSync.init({
+        server: {
+            baseDir: "./build"  // здесь добавляем откуда он должен взять файлы
+            }
+        });
+    browserSync.watch('build', browserSync.reload)  // добовляем эту строку сцелью чтобы browserSync отслеживал папку build и когда там будут изменения он перезагружал браузер
+});
 
 
 // add pug
@@ -12,6 +24,7 @@ gulp.task('pug', function(){
         }))
         .pipe(gulp.dest('build'));
 });
+
 
 // add stylus + autoprefixer
 gulp.task('stylus', function(){
@@ -41,7 +54,7 @@ gulp.task('watch', function(){
 
 // запускаем порядок запуска тасков
 gulp.task('default', gulp.series(
-    gulp.parallel('pug','stylus'),
-    'watch'
-))
+    gulp.parallel('pug','stylus'),    // запускаем паралельно/одновременно
+    gulp.parallel('watch','serve')    // запускаем паралельно/одновременно
+));
 
